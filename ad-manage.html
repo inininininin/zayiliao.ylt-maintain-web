@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>忠安医联体运维</title>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+
+    <script src="/libs/jquery.min.js"></script>
+    <script src="/libs/jquery.cookie.js"></script>
+    <script src="/libs/layer/layer.js"></script>
+    <script src="/libs/moment.js"></script>
+    <link rel="stylesheet" type="text/css" href="/libs/jquery-easyui-1.8.7/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/libs/jquery-easyui-1.8.7/themes/icon.css">
+    <script type="text/javascript" src="/libs/jquery-easyui-1.8.7/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/libs/jquery-easyui-1.8.7/locale/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" href="/libs/jQueryViewer20160329/css/viewer.min.css">
+    <script src="/libs/jQueryViewer20160329/js/viewer.min.js"></script>
+    <script src="/libs/jQueryViewer20160329/js/viewer-jquery.min.js"></script>
+    <script src="/libs/common.js"></script>
+    <link rel="stylesheet" href="/libs/common.css" />
+    <script src="/libs/jquery.extend.oneall.js"></script>
+
+
+    <script src="/maintain/libs/common.js"></script>
+    <link rel="stylesheet" href="/maintain/libs/common.css" />
+
+
+
+
+</head>
+
+<style>
+    #rowsPad .datagrid-wrap.panel-body.panel-body-noheader.panel-body-nobottom {
+        border-top: none !important;
+    }
+
+    #rowsPad .datagrid-cell {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<script>
+
+
+
+    var queryStringObject = common.queryStringObject();
+
+    var rowsPad = {
+        selector: '#rowsPad',
+        param: {
+            token: null
+        },
+        data: {
+            queryParam: { del: 0 },
+            alterRows: {},
+            rowsData: {}
+        },
+        beforePage: function () {
+        },
+        afterPage: function () {
+            $(rowsPad.selector).find('[name=dg]').datagrid({
+                columns: [[
+                    {
+                        field: 'cover', title: '封面', width: 60, align: 'center', halign: 'center', formatter: function (value, row, index) {
+                            return value ? `<span class="image-previewer"><img src='${value}' style='width:50px' data-original='${value}'/></span>` : value
+                        }
+                    },
+                    {
+                        field: 'type', title: '类型', width: 80, align: 'left', halign: 'center', formatter: function (value, row, index) {
+                            return value == 0 ? '无' : value == 1 ? '网页' : value == 2 ? '文章': '未知';
+                        }
+                    },
+                    {
+                        field: 'place', title: '广告位', width: 80, align: 'left', halign: 'center', formatter: function (value, row, index) {
+                            return value == 0 ? '集采轮播图' : '未知';
+                        }
+                    },
+                    { field: 'viewCount', title: '浏览量', width: 70, align: 'right', sortable: true, halign: 'center' },
+                    { field: 'remark', title: '备注', width: 200, align: 'left', halign: 'center' },
+                    {
+                        field: 'frozen', title: '冻结', width: 50, align: 'center', halign: 'center', formatter: function (value, row, index) {
+                            return value == 1 ? '是' : '否';
+                        }
+                    },
+                    { field: 'orderNo', title: '排序号', width: 70, align: 'right', sortable: true, halign: 'center' },
+                    {
+                        field: 'addTime', title: '添加时间', width: 158, align: 'left', sortable: true, halign: 'center', formatter: function (value, row, index) {
+                            return value ? moment(value).format('YYYY-MM-DD HH:mm:ss') : value;
+                        }
+                    }
+                ]],
+                frozenColumns: [[
+                    { field: 'ck', align: 'left', checkbox: true },
+                    {
+                        field: 'name', title: '名称', width: 250, align: 'left', halign: 'center', formatter: function (value, row, index) {
+                            debugger
+                            if (value == '汇总：')
+                                return value;
+                            return `<a href="JavaScript:void(0)" style="width:100%;display:inline-block;height:100%;" title="${value || ''}" onclick="maintainCommon.newTab('广告:${common.subOmitRight(row.name, 10)}','/maintain/ad.html?adId=${row.adId}')">${value}</a>`;
+                        }, styler: function (value, row, index) {
+                            return ``
+                        }
+                    }
+                ]],
+                toolbar: `${rowsPad.selector} [name=tb]`,
+                footer: `${rowsPad.selector} [name=ft]`,
+                idField: 'adId',
+                pagination: true,
+                rownumbers: true,
+                emptyMsg: '无数据',
+                singleSelect: false,
+                ctrlSelect: true,
+                checkOnSelect: true,
+                selectOnCheck: true,
+                multiSort: true,
+                autoRowHeight: false,
+
+                onCheck: function (index, row) {
+                    $(rowsPad.selector).find('[name=tb] [name=checkedCount]').html(`已选:${$(rowsPad.selector).find('[name=dg]').datagrid('getChecked').length}`)
+                },
+                onUncheck: function (index, row) {
+                    $(rowsPad.selector).find('[name=tb] [name=checkedCount]').html(`已选:${$(rowsPad.selector).find('[name=dg]').datagrid('getChecked').length}`)
+                },
+                onCheckAll: function (index, row) {
+                    $(rowsPad.selector).find('[name=tb] [name=checkedCount]').html(`已选:${$(rowsPad.selector).find('[name=dg]').datagrid('getChecked').length}`)
+                },
+                onUncheckAll: function (index, row) {
+                    $(rowsPad.selector).find('[name=tb] [name=checkedCount]').html(`已选:${$(rowsPad.selector).find('[name=dg]').datagrid('getChecked').length}`)
+                },
+                rowStyler: function (index, row) {
+
+                },
+                loader: function (param, success, error) {
+                    debugger
+
+                    param.token = rowsPad.param.token;
+                    param.ps = param.rows;
+                    param.pn = param.page;
+                    Object.assign(param, rowsPad.data.queryParam);
+                    $.ajax({
+                        url: '/maintain/ads',
+                        type: 'get',
+                        data: param,
+                        success: function (data) {
+                            if (data.code != 0) {
+                                alert(data.codeMsg)
+                                maintainCommon.breakCodeProcess(data.code, data.codeMsg)
+                                return false;
+                            } else {
+                                rowsPad.data.rowsData.rows = data.data.rows;
+                                $.ajax({
+                                    url: '/maintain/ads-sum',
+                                    type: 'get',
+                                    async: false,
+                                    data: param,
+                                    success: function (data) {
+                                        if (data.code != 0) {
+                                            alert(data.codeMsg)
+                                            maintainCommon.breakCodeProcess(data.code, data.codeMsg)
+                                            return false;
+                                        } else {
+                                            rowsPad.data.rowsData.sum = data.data;
+
+                                        }
+
+                                    }
+                                })
+                                success(rowsPad.data.rowsData);
+                                $(rowsPad.selector).find('[name=tb] [name=sum]').html(`总浏览量:${rowsPad.data.rowsData.sum.totalViewCount || ''}`)
+                            }
+
+                        }
+                    })
+                },
+                loadFilter: function (data) {
+                    debugger
+                    var fdata = {
+                        rows: data.rows, total: data.sum.rowCount
+                    }
+                    return fdata;
+                }, onLoadSuccess: function () {
+                    $('.image-previewer').viewer({
+                        url: 'data-original',
+                    })
+                }
+            });
+        },
+        addRow: function () {
+            parent.$('#tabPad').tabs('add', {
+                title: '添加广告',
+                closable: true,
+                width: "100%",
+                content: "<iframe src='ad-add.html' style='width:100%;height:100%;border:none;'/>",
+                tools: [{
+                    iconCls: 'icon-mini-refresh',
+                    handler: function () {
+                        var current_tab = parent.$('#tabPad').tabs('getSelected');
+                        parent.$('#tabPad').tabs('update', {
+                            tab: current_tab,
+                            options: {
+                                content: current_tab.panel('options', 'content'),
+                            }
+                        });
+                    }
+                }
+                ]
+            });
+        },
+        alterRowsStart: function () {
+            var selections = $(rowsPad.selector).find('[name=dg]').datagrid('getSelections');
+            var selectionIdArr = null;
+            var count = 0;
+            var todo = false;
+            if (selections == null || selections.length == 0) {
+                count = rowsPad.data.rowsData.sum.rowCount
+            } else if (selections.length == 1) {
+                selectionIdArr = $(selections).oneall_attrs('adId');
+                count = 1;
+            } else {
+                debugger
+                selectionIdArr = $(selections).oneall_attrs('adId');
+                count = selectionIdArr.length;
+
+            }
+            $('#alterRowsPad').window('open')
+
+            $('#alterRowsPad .expectedRowCount').text(count)
+        },
+        alterRows: function () {
+            var selections = $(rowsPad.selector).find('[name=dg]').datagrid('getSelections');
+            var selectionIdArr = null;
+            var count = 0;
+            var todo = false;
+            if (selections == null || selections.length == 0) {
+                var r = prompt(`你没有选择任何记录，将操作当前全部 ${rowsPad.data.rowsData.sum.rowCount} 条记录 ，确定吗？`, `请输入确认数量`);
+                if (r != null) {
+                    if (r == rowsPad.data.rowsData.sum.rowCount) {
+                        todo = true;
+                    } else {
+                        alert('输入有误')
+                        return;
+                    }
+                }
+                count = rowsPad.data.rowsData.sum.rowCount
+            } else if (selections.length == 1) {
+                selectionIdArr = $(selections).oneall_attrs('adId');
+                count = 1;
+
+                if (!confirm(`将操作记录 ${selections[0].name} ，确定吗？`))
+                    return;
+                todo = true
+            } else {
+                debugger
+                selectionIdArr = $(selections).oneall_attrs('adId');
+                count = selectionIdArr.length;
+
+                var r = prompt(`你选择了 ${count} 条记录 ，确定吗？`, `请输入确认数量`);
+                if (r != null) {
+                    if (r == selections.length) {
+                        todo = true;
+                    } else {
+                        alert('输入有误')
+                        return;
+                    }
+                }
+            }
+            if (todo) {
+                var password = prompt(`危险操作，请输入密码。`, ``)
+                if (password != null) {
+                    if (password.length == 0) {
+                        alert('请输入密码')
+                        return;
+                    }
+                    doDel = true;
+                } else {
+                    return;
+                }
+
+                $.ajax({
+                    type: 'post',
+                    url: `/maintain/ads-alter`,
+                    data: Object.assign({ password: password, expectedRowCount: count, adId: selectionIdArr ? selectionIdArr.join() : '' }, rowsPad.data.queryParam, rowsPad.data.alterRows),
+                    success: function (data) {
+                        if (data.codeMsg)
+                            alert(data.codeMsg)
+                        if (data.code == 0) {
+                            $(rowsPad.selector).find('[name=dg]').datagrid('reload')
+                            $('#ff').form('clear');
+                            $('#alterRowsPad').window('close')
+                        }
+                    }
+                })
+            }
+        }
+    }
+
+    rowsPad.beforePage();
+
+    var loadingPad = {
+        remove: function () {
+            $("#loadingPad").remove();
+        }
+    }
+
+
+    $.parser.onComplete = function () {
+        loadingPad.remove()
+    }
+
+
+
+</script>
+
+<body style="margin:0;padding:0;">
+    <div id='loadingPad' style="position: absolute; z-index: 1000; top: 0px; left: 0px; 
+        width: 100%; height: 100%; background: white; text-align: center;padding:5px 10px">
+        <font>loading···</font>
+    </div>
+
+    <div id="rowsPad">
+        <div name="tb" style="padding:2px 5px;">
+            <div style="">
+                <a href="JavaScript:void(0)" class="easyui-linkbutton" iconCls="icon-search"
+                    onclick="$(rowsPad.selector).find('[name=dg]').datagrid('load').datagrid('clearChecked');">查询</a>
+
+                <span style='display:inline-block;margin-top:5px;margin-left:5px;'>
+                    <span style="">关键字:</span>
+                    <input name="kw" class="easyui-textbox" data-options="
+            iconWidth:20,
+            icons:[{
+                iconCls:'icon-clear',
+                handler: function(e){
+                    $(e.data.target).textbox('setValue','');
+                }
+            }],
+            onChange:function(newValue, oldValue){
+                rowsPad.data.queryParam.kw=newValue
+            }" style="width:200px" /></span>
+
+            <span style='display:inline-block;margin-top:5px;margin-left:5px;'>
+                    <span style="">类型:</span>
+        <input name="type" class="easyui-combobox" 
+        data-options="editable:false,panelHeight:'auto',value:'',data:[{
+			text: '无',
+			value: '0'
+		},{
+			text: '网页',
+			value: '1'
+		},{
+			text: '文章',
+			value: '2'
+		}],
+                     iconWidth:20,
+                     icons:[{
+                         iconCls:'icon-clear',
+                         handler: function(e){
+                             $(e.data.target).combobox('setValue','');
+                         }
+                     }],
+                     onChange:function(newValue, oldValue){
+                        rowsPad.data.queryParam.type=newValue
+                     }" />
+</span>
+<span style='display:inline-block;margin-top:5px;margin-left:5px;'>
+        <span style="">广告位:</span>
+                     <input name="place" class="easyui-combobox"
+        data-options="editable:false,panelHeight:'auto',value:'',data:[{
+            text: '集采轮播图',
+            value: '0'
+        }],
+                     iconWidth:20,
+                     icons:[{
+                         iconCls:'icon-clear',
+                         handler: function(e){
+                             $(e.data.target).combobox('setValue','');
+                         }
+                     }],
+                     onChange:function(newValue, oldValue){
+                        rowsPad.data.queryParam.place=newValue
+                     }" />
+</span>
+
+                <span style='display:inline-block;margin-top:5px;margin-left:5px;'>
+                    <span style="">添加时间 From:</span>
+                    <input name="addTimeFrom" class="easyui-datebox" style="width:135px" data-options="
+                editable:false,
+                icons:[{
+                    iconCls:'icon-clear',
+                    handler: function(e){
+                        $(e.data.target).datebox('setValue','');
+                    }
+                }],
+            onChange:function(newValue, oldValue){
+                rowsPad.data.queryParam.addTimeFrom=newValue
+            }">
+                </span>
+
+                <span style='display:inline-block;margin-top:5px;margin-left:5px;'>
+                    <span style="">To:</span>
+                    <input name="addTimeTo" class="easyui-datebox" style="width:135px" data-options="
+                editable:false,
+                icons:[{
+                    iconCls:'icon-clear',
+                    handler: function(e){
+                        $(e.data.target).datebox('setValue','');
+                    }
+                }],
+        onChange:function(newValue, oldValue){
+            rowsPad.data.queryParam.addTimeTo=newValue
+        }"></span>
+
+                <span style='display:inline-block;margin-top:5px;margin-left:5px;'>
+                    <span style="">&nbsp;冻结:</span>
+                    <input name="frozen" class="easyui-combobox" style="width:80px" data-options="editable:false,panelHeight:'auto',value:'',data:[
+           {
+                                         text: '否',
+                                         value: '0'
+                                     },{
+                                         text: '是',
+                                         value: '1'
+                                     }],
+            iconWidth:20,
+            icons:[{
+                iconCls:'icon-clear',
+                handler: function(e){
+                    $(e.data.target).combobox('setValue','');
+                }
+            }],
+            onChange:function(newValue, oldValue){
+                rowsPad.data.queryParam.frozen=newValue
+            }" />
+                </span>
+
+                <!-- <span style='display:inline-block;margin-top:5px;margin-left:5px;'>
+                    <span style="">删除:</span>
+                    <input name="del" class="easyui-combobox" style="width:80px" data-options="editable:false,panelHeight:'auto',value:0,data:[
+           {
+                                         text: '否',
+                                         value: '0'
+                                     },{
+                                         text: '是',
+                                         value: '1'
+                                     }],
+            iconWidth:20,
+            icons:[{
+                iconCls:'icon-clear',
+                handler: function(e){
+                    $(e.data.target).combobox('setValue','');
+                }
+            }],
+            onChange:function(newValue, oldValue){
+                rowsPad.data.queryParam.del=newValue
+            }" />
+                </span> -->
+            </div>
+            <div style="margin-top:5px;"></div>
+            <span name="checkedCount" style="margin-right:5px;">已选:0</span><span name="sum"></span>
+        </div>
+        <table name="dg" style="width:100%;min-height:420px">
+        </table>
+        <div name="ft" style="padding:2px 5px;">
+            <a href="JavaScript:void(0)" class="easyui-linkbutton" iconCls="icon-add" title="新增记录" plain="true"
+                onclick="rowsPad.addRow()"></a>
+            <a href="JavaScript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" title="批量操作" plain="true"
+                onclick="rowsPad.alterRowsStart()">批量操作</a>
+        </div>
+
+        <div id="alterRowsPad" style="padding:5px;display:none;" class="easyui-window" title="批量操作" data-options="modal:true,closed:true,closable:true,
+        width:600">
+            <strong style="color:red">本操作是危险操作，若未选择任何记录，将操作当前查出的全部记录！</strong><br />
+            <span>当前将操作 <strong style="color:red" class="expectedRowCount"></strong> 条记录，请仔细核对！！！</span>
+
+
+            <form id="ff" method="post">
+                <input name="frozen" class="easyui-combobox" style="width:100%" label="冻结:" labelPosition="top"
+                    data-options="editable:false,panelHeight:'auto',value:'',data:[
+                                {
+                                    text: '否',
+                                    value: '0'
+                                },{
+                                     text: '是',
+                                     value: '1'
+                                 }],
+                                 iconWidth:20,
+                                 icons:[{
+                                     iconCls:'icon-clear',
+                                     handler: function(e){
+                                         $(e.data.target).combobox('setValue','');
+                                     }
+                                 }],
+                                 onChange:function(newValue, oldValue){
+                                    rowsPad.data.alterRows.frozenNew=newValue
+                                 }" />
+                <input name="frozenReason" class="easyui-textbox" style="width:100%;height:200px;" label="冻结原因:"
+                    labelPosition="top" data-options="
+                        value:'',
+                        multiline:true,
+                        onChange:function(newValue, oldValue){
+                            rowsPad.data.alterRows.frozenReasonNew=newValue
+                        }" style="width:200px">
+
+                <input name="orderNo" class="easyui-numberbox" style="width:100%" label="排序:" labelPosition="top"
+                    data-options="
+                                value:'',
+                                precision:2,
+                                iconWidth:20,
+                                icons:[{
+                                    iconCls:'icon-clear',
+                                    handler: function(e){
+                                        $(e.data.target).textbox('setValue','');
+                                    }
+                                }],
+                                onChange:function(newValue, oldValue){
+                                    rowsPad.data.alterRows.orderNoNew=newValue
+                                }" style="width:200px">
+                <input name="addTime" class="easyui-datetimebox" style="width:100%" label="添加时间:" labelPosition="top"
+                    data-options="
+                                    value:'',
+                                    editable:false,
+                                    icons:[{
+                                        iconCls:'icon-clear',
+                                        handler: function(e){
+                                            $(e.data.target).datetimebox('setValue','');
+                                        }
+                                    }],
+                                    onChange:function(newValue, oldValue){
+                                        rowsPad.data.alterRows.addTimeNew=newValue
+                                    }">
+                <input name="alterTime" class="easyui-datetimebox" style="width:100%" label="更新时间:" labelPosition="top"
+                    data-options="
+                                        value:'',
+                                        editable:false,
+                                        icons:[{
+                                            iconCls:'icon-clear',
+                                            handler: function(e){
+                                                $(e.data.target).datetimebox('setValue','');
+                                            }
+                                        }],
+                                        onChange:function(newValue, oldValue){
+                                            rowsPad.data.alterRows.alterTimeNew=newValue
+                                        }"><input name="del" class="easyui-combobox" style="width:100%" label="删除:"
+                    labelPosition="top" data-options="editable:false,panelHeight:'auto',value:'',data:[
+                                {
+                                    text: '否',
+                                    value: '0'
+                                },{
+                                     text: '是',
+                                     value: '1'
+                                 }],
+                                 iconWidth:20,
+                                 icons:[{
+                                     iconCls:'icon-clear',
+                                     handler: function(e){
+                                         $(e.data.target).combobox('setValue','');
+                                     }
+                                 }],
+                                 onChange:function(newValue, oldValue){
+                                    rowsPad.data.alterRows.delNew=newValue
+                                 }" />
+            </form>
+            <div style="margin-top:5px;">
+                <a href="JavaScript:void(0)" class="easyui-linkbutton" iconCls="icon-save"
+                    onclick="rowsPad.alterRows()">确定</a>
+                <a href="JavaScript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+                    onclick="$('#ff').form('clear');$('#alterRowsPad').window('close');">取消</a>
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+<script>
+
+
+
+
+
+    rowsPad.afterPage();
+</script>
+
+
+</html>

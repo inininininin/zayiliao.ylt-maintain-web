@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <title>忠安医联体运维</title>
+    <script src="/libs/jquery.min.js"></script>
+    <script src="/libs/jquery.cookie.js"></script>
+    <script src="/libs/layer/layer.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/libs/jquery-easyui-1.8.7/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/libs/jquery-easyui-1.8.7/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="/libs/jquery-easyui-1.8.7/demo/demo.css">
+    <script type="text/javascript" src="/libs/jquery-easyui-1.8.7/jquery.easyui.min.js"></script>
+</head>
+<style>
+
+</style>
+
+<body style="margin:0;padding:0;">
+    <div style="margin-left:20px;">
+        <h3 style="">近1小时的访问量: <span id="requestCountOfOneHourRecently"></span></h3>
+        <h3 style="">近1天的访问量: <span id="requestCountOfOneDayRecently"></span></h3>
+        <h3 style="">近1星期的访问量: <span id="requestCountOfOneWeekRecently"></span></h3>
+        <h3 style="">历史访问量: <span id="requestCountOfHistory"></span></h3>
+    </div>
+</body>
+
+<script>
+   $.get('/maintain/overview',function(data){
+    $('#requestCountOfOneHourRecently').text(data.data.requestCountOfOneHourRecently)
+    $('#requestCountOfOneDayRecently').text(data.data.requestCountOfOneDayRecently)
+    $('#requestCountOfOneWeekRecently').text(data.data.requestCountOfOneWeekRecently)
+    $('#requestCountOfHistory').text(data.data.requestCountOfHistory)
+   })
+</script>
+
+</html>

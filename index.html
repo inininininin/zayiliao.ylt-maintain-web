@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>忠安医联体运维</title>
+    <script src="libs/common.js"></script>
+    <link rel="stylesheet" href="libs/common.css" />
+    <script src="index/index.js"></script>
+    <link rel="stylesheet" href="index/index.css" />
+
+    <script src="../libs/jquery.min.js"></script>
+    <script src="../libs/zTree_v3/js/jquery.ztree.all.js"></script>
+    <link rel="stylesheet" href="../libs/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <script src="../libs/jquery.cookie.js"></script>
+    <script src="../libs/layer/layer.js"></script>
+    <script src="../libs/navim.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../libs/jquery-easyui-1.8.7/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../libs/jquery-easyui-1.8.7/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../libs/jquery-easyui-1.8.7/demo/demo.css">
+    <script type="text/javascript" src="../libs/jquery-easyui-1.8.7/jquery.easyui.min.js"></script>
+</head>
+<style>
+    .ztree li a.curSelectedNode {
+        height: 18px !important;
+    }
+</style>
+
+<body style="margin:0;padding:0;">
+
+    <div class="easyui-layout" style="width:100%;position:absolute;top:0;bottom:0;">
+        <style>
+            .ztree * {
+                font-size: 16px;
+            }
+
+            .ztree li {
+                margin: 4px;
+            }
+        </style>
+        <div data-options="region:'north'" style="height:80px">
+            <div style="margin-top:18px;">
+                <span style="padding-left:10px;font-size: 26px;font-weight: 700;">忠安医疗</span>
+                <span style="padding-left:10px;font-size: 22px;">医联体-运维平台</span>
+            </div>
+        </div>
+        <div data-options="region:'west',split:true" title=" " style="width:200px;">
+            <div style="width:100%;border-bottom:1px solid #e4e5e7;text-align:center;padding:10px 0;">
+                <img class="cover" src="./index/resource/head.png" style="width:60px;">
+                <div class="account" style="color: rgb(119, 119, 119);">&nbsp;</div>
+            </div>
+            <ul class="menu ztree"
+                style="width:100%;padding:0;margin:0;background-color: unset;border:none;position:relative;font-size:18px;">
+            </ul>
+        </div>
+        <div data-options="region:'center'">
+            <div id="tabPad" class="easyui-tabs" style="width:100%" data-options="
+            narrow: true,
+            border:false,
+            fit: true,
+            tools: '#tab-tools',
+            onSelect:function(title,index){
+                debugger
+               var tab= $(this).tabs('getTab',index);
+               var url=tab.panel('options').url;
+               zTreeObj.selectNode( zTreeObj.getNodesByFilter(function(node){if(node['_url']===url) return true; else return false;})[0])
+            }">
+            </div>
+            <div id="tab-tools">
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dustbin'"
+                    onclick="
+                            if(confirm('确定关闭所有标签页吗？'))
+                                $($('#tabPad').tabs('tabs')).each(function(index,ele){ $('#tabPad').tabs('close',),index})   "></a>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var logining, zNodes;
+
+
+    $.ajax({
+        url: '/maintain/login-refresh',
+        type: 'post',
+        async: false,
+        success: function (data) {
+            if (data.codeMsg)
+                alert(data.codeMsg)
+            if (data.code == 0) {
+                logining = data.data
+                $.cookie('maintainLogin', JSON.stringify(logining), { expires: 365, path: '/' });
+            } else {
+                maintainCommon.breakCodeProcess(data.code, data.codeMsg)
+            }
+        }
+    })
+
+    $('.account').text(logining.account)
+    if (logining.cover)
+        $('.cover').attr('src', logining.cover)
+
+
+    zNodes = []
+
+    zNodes.push({ name: '概览', _url: './overview.html' })
+    zNodes.push({
+        name: '医院', children: [
+            { name: '医院', _url: './hospital-manage.html' },
+            { name: '用户', _url: './hospital-user-manage.html' },
+            { name: '广告', _url: './hospital-ad-manage.html' },
+            // {name: '权限管理', uurl: './userapis.html?currentPath=医院端权限管理'}
+        ], _url: null
+    })
+    zNodes.push({
+        name: '门诊', children: [
+            { name: '门诊', _url: './hospital-clinic-manage.html' },
+            { name: '用户', _url: './hospital-clinic-user-manage.html' },
+            // {name: '权限管理', uurl: './userapis.html?currentPath=门诊端权限管理'}
+        ], _url: null
+    })
+    zNodes.push({ name: '运营手册', _url: './operating-manual-manage.html' })
+    zNodes.push({
+        name: '运营', children: [
+            { name: '用户', _url: './manager-user-manage.html' },
+            // {name: '权限管理', uurl: './userapis.html?currentPath=门诊端权限管理'}
+        ], _url: null
+    })
+    zNodes.push({ name: '病员', _url: './patient-manage.html' })
+    zNodes.push({ name: '文章', _url: './hospital-article-manage.html' })
+    zNodes.push({ name: '项目', _url: './hospital-project-manage.html' })
+    zNodes.push({ name: '活动', _url: './hospital-activity-manage.html' })
+    zNodes.push({ name: '科室', _url: './hospital-office-manage.html' })
+    zNodes.push({ name: '专家', _url: './hospital-doctor-manage.html' })
+    zNodes.push({ name: '广告', _url: './ad-manage.html' })
+    zNodes.push({ name: '短连接', _url: './set-alley.html' })
+    zNodes.push({
+        name: '页面', children: [
+            { name: '用户协议', _url: '/maintain/set-page-user-protocol.html' }
+        ], _url: null
+    })
+    if (logining.type == 1) {
+        zNodes.push({ name: '运维用户', _url: './maintain-user-manage.html' })
+        zNodes.push({ name: '参数', _url: './param-manage.html' })
+    }
+
+    zNodes.push({ name: '退出登录', _url: '' })
+    // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+    var setting = {
+        view: {
+            dblClickExpand: false
+        },
+        callback: {
+            onClick: function (e, treeId, treeNode) {
+                if (treeNode.name == '退出登录') {
+                    logout();
+                    return;
+                }
+                if (treeNode._url)
+                    maintainCommon.newTab(treeNode.name, treeNode._url)
+
+
+                zTreeObj.expandNode(treeNode);
+            }
+        }
+    };
+    // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+    var zTreeObj = $.fn.zTree.init($(".menu"), setting, zNodes);
+
+
+    function logout() {
+
+        $.ajax({
+            type: 'post',
+            url: '/maintain/logout',
+            async: true
+        })
+        location.href = './login.html';
+    }
+
+
+    $(document).ready(function () {
+        maintainCommon.newTab('概览', './overview.html')
+
+    })
+</script>
+
+</html>

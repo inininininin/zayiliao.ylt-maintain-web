@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+   
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>忠安医联体运维</title>
+    <script src="libs/common.js"></script>
+    <link rel="stylesheet" href="libs/common.css"/>
+    <script src="index/index.js"></script>
+    <link rel="stylesheet" href="index/index.css"/>
+
+    <script src="../libs/jquery.min.js"></script>
+    <script src="../libs/zTree_v3/js/jquery.ztree.all.js"></script>
+    <link rel="stylesheet" href="../libs/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <script src="../libs/jquery.cookie.js"></script>
+    <script src="../libs/layer/layer.js"></script>
+    <script src="../libs/navim.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../libs/jquery-easyui-1.8.7/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../libs/jquery-easyui-1.8.7/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../libs/jquery-easyui-1.8.7/demo.css">
+    <script type="text/javascript" src="../libs/jquery-easyui-1.8.7/jquery.easyui.min.js"></script>
+</head>
+<style>
+    .ztree li {
+        margin: 3px;
+    }
+
+    .ztree * {
+        font-size: 14px;
+
+    }
+
+    button, select {
+        cursor: pointer;
+
+    }
+
+
+</style>
+<body style="margin:0">
+
+       
+    <div style="height:70px;border-bottom: 1px solid darkgray;">
+        <div style="line-height: 70px;float:left;height:100%;padding:0 30px;text-align: center;font-weight: 700;font-size: 24px;">忠安医联体运维</div>
+    </div>
+    <div style="position: absolute;top:71px;left:0;bottom:0;right:0;">
+        <div id="leftPad" style="vertical-align: top;width:150px;height: 100%;display: inline-block;text-align: center;overflow: auto;">
+            <div style="width:100%;border-bottom:1px solid #e4e5e7;text-align:center;padding:10px 0;">
+                <img src="./index/resource/head.png" style="width:60px;">
+                <div id="account" style="color: rgb(119, 119, 119);"></div>
+            </div>
+            <ul id="menu" class="ztree"  style="padding:0;margin:0;    margin-top: 5px;"></ul>
+        </div><div id="middlePad"
+                   style="vertical-align: top;width:10px;display: inline-block;height: 100%;cursor: pointer;position:relative;background-color: darkgray;color: #ffffff" onclick="hideLeftPad()">
+        <div style="position:absolute;top:50%;transform: translateY(-50%);width:100%;text-align: center;">
+            .<br/>
+            .<br/>
+            .<br/>
+            .<br/>
+            .<br/>
+            .<br/>
+        </div>
+        </div>
+        <div id="rightPad"
+                style="height: 100%;display: inline-block;position: absolute;left:160px;top:0;bottom:0;right:0;">
+            <iframe style="width:100%;height:100%"  frameborder="no" src="./product.html?currentPath=器械管理"></iframe>
+        </div>
+        
+    </div>
+</body>
+
+<script>
+
+    var token = $.cookie('token'),logining, account, zNodes;
+
+    $.ajaxSetup({
+        layerIndex: -1,
+        beforeSend: function () {
+            this.layerIndex = layer.load(0, {shade: [0.5, '#393D49']});
+        },
+        complete: function () {
+            layer.close(this.layerIndex);
+        }
+    });
+
+    if (token) {
+        $.ajax({
+            url: '/maintain/login-refresh',
+            data: {token: token},
+            type: 'post',
+            async: false,
+            success: function (res) {
+                if (res.code == 0) {
+                    $.cookie('token', res.data.token, {expires: 30, path: '/'});
+                    $.cookie('logining', JSON.stringify(res.data), {expires: 30, path: '/'});
+                    account = res.data.account
+                } else {
+                    $.removeCookie('token', {path: '/'});
+                    $.removeCookie('logining', {path: '/'});
+                    breakCodeProcess(res.code,res.codeMsg)
+                }
+            }
+        })
+    } else
+        location.href = './login.html';
+
+
+    $('#account').text(account)
+
+
+    zNodes = []
+
+    zNodes.push({
+        name: '医院端管理', children: [
+            {name: '用户管理', uurl: './hospitaler.html?currentPath=医院端用户管理'},
+            {name: '医院管理', uurl: './hospital.html?currentPath=医院管理'},
+            {name: '医院主轮播', uurl: './hospitalMaincarousel.html?currentPath=医院主轮播'},
+            // {name: '权限管理', uurl: './userapis.html?currentPath=医院端权限管理'}
+        ]
+    })
+    zNodes.push({
+        name: '门诊端管理', children: [
+            {name: '用户管理', uurl: './clinicer.html?currentPath=门诊端用户管理'},
+            {name: '门诊管理', uurl: './clinic.html?currentPath=门诊管理'},
+            // {name: '权限管理', uurl: './userapis.html?currentPath=门诊端权限管理'}
+        ]
+    })
+
+    zNodes.push({name: '病人管理', uurl: './patient.html?currentPath=病人管理'})
+    zNodes.push({name: '文章管理', uurl: './article/index.html?currentPath=文章管理'})
+    zNodes.push({name: '科室管理', uurl: './office.html?currentPath=科室管理'})
+    zNodes.push({name: '专家管理', uurl: './doctor.html?currentPath=专家管理'})
+    zNodes.push({name: '集采主轮播', uurl: './procurementMaincarousel.html?currentPath=集采主轮播'})
+
+
+    zNodes.push({name: '退出登录', uurl: ''})
+    // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+    var setting = {
+        view: {
+            dblClickExpand: false
+        },
+        callback: {
+            onClick: function (e, treeId, treeNode) {
+                if (treeNode.name == '退出登录') {
+                    logout();
+                    return
+                }
+                zTreeObj.expandNode(treeNode);
+                navim.clear()
+                $('iframe').attr('src', treeNode.uurl)
+                //$(treeNode).parent().parent().css('background-color','#e8e8e8')
+            }
+        }
+    };
+    // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+    var zTreeObj = $.fn.zTree.init($("#menu"), setting, zNodes);
+
+
+    function logout() {
+     
+        $.ajax({
+            url:'/maintain/logout',
+            data: {token: token},
+            async: true
+        })
+        location.href = './login.html';
+    }
+
+    function hideLeftPad(){
+        if($('#leftPad').is(':hidden')) {
+            $('#leftPad').show();
+            $('#rightPad').css("left","160px")
+        }
+        else {
+            $('#leftPad').hide();
+            $('#rightPad').css("left","10px")
+        }
+    }
+</script>
+</html>

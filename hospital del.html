@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        var rootDis="../"
+    </script>
+    <title>忠安医联体运维</title>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="libs/common.js"></script>
+    <link rel="stylesheet" href="libs/common.css"/>
+    <script src="../libs/giveup.js"></script>
+    <script src="../libs/jquery.min.js"></script>
+    <script src="../libs/navim.js"></script>
+    <script src="../libs/jquery.cookie.js"></script>
+    <script src="../libs/jquery.extend.oneall.js"></script>
+    <script src="../libs/layer/layer.js"></script>
+    <script src="../libs/moment.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-cookies@1.5.12/vue-cookies.js"></script>
+    <style>
+        .cell {
+            text-align: center;
+            display: inline-block;
+            padding: 0 5px;
+            overflow: hidden;
+            height: 100%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            cursor: default;
+            width: 150px;
+            border-left: 1px solid #7d7d7d;
+        }
+
+        .row .cell {
+            text-align: left;
+        }
+
+        .row {
+            border-bottom: 1px solid #7d7d7d;
+            padding: 3px 0;
+            height: 25px;
+            line-height: 25px;
+            font-size: 15px;
+        }
+
+        .row-item:hover {
+            background-color: #e8e8e8;
+        }
+
+        .row-title {
+            background-color: #e8e8e8;
+        }
+
+        [v-cloak] {
+            display: none;
+        !important;
+        }
+        button,select {
+            cursor:pointer;
+
+        }
+    </style>
+</head>
+
+<body style="margin:0;">
+<div id="app" v-cloak>
+    <div id="currentPath" style="margin:5px 0 0 5px;font-size: 14px" v-html="'导航：'+navim.spring()"></div>
+    <hr/>
+
+    <div style="width:100%;margin-top:5px;">
+        <button style="margin:0 5px;display:inline-block;margin-top:5px;min-width:60px;padding:0 10px;height:25px"
+                @click="query()">查询
+        </button>
+        <button style="margin:0 5px;display:inline-block;margin-top:5px;min-width:60px;padding:0 10px;height:25px"
+                @click="window.location.href = `./hospitalAdd.html?currentPath=添加医院`">添加医院
+        </button>
+    </div>
+
+    <div style="width:100%;margin-top:10px;">
+    <span style="height:25px;width:300px;display:inline-block;margin-top:5px;">
+        <span style="font-size: 14px;display:inline-block;width:25%;text-align: right">关键字:</span>
+        <span>
+                        <input v-model="queryParams.kw" name="kwQuery" style="width:60%;padding:3px;" />
+                    </span>
+    </span>
+
+        <span style="height:25px;width:300px;display:inline-block;margin-top:5px;">
+        <span style="font-size: 14px;display:inline-block;width:25%;text-align: right">精确字:</span>
+        <span>
+                        <input v-model="queryParams.ew" name="kwQuery" style="width:60%;padding:3px;" />
+                    </span>
+    </span>
+
+
+    </div>
+
+    <div style="clear: both"></div>
+    <div id="itemsContainer" style="width:99%;border: 2px solid black;margin:0 auto;margin-top:15px;position:relative">
+        <div id="sum" style="border-bottom: 1px solid black;font-size: 15px;padding:3px;color: #1006F1;">总个数=<span>{{sum.rowCount}}</span>
+        </div>
+        <div class="row-title">
+            <span class="cell " style="width:40px;">选择</span>
+            <span class="cell " style="width:50px;">序号</span>
+            <span class="cell "  style="width:300px;" >医院名</span>
+            <span class="cell "  >电话</span>
+            <span class="cell "  >院长</span>
+            <span class="cell " style="cursor: pointer;width:50px;" @click="sortItems('orderNo')">排序<span
+                    class="sortBtn">{{newSort?'-':(sorts.orderNo=='desc'?'↓':(sorts.orderNo=='asc'?'↑':'-'))}}</span></span>
+            <span class="cell " style="cursor: pointer" @click="sortItems('addTime')">添加时间<span
+                    class="sortBtn">{{newSort?'-':(sorts.addTime=='desc'?'↓':(sorts.addTime=='asc'?'↑':'-'))}}</span></span>
+            <span class="cell ">操作</span>
+        </div>
+
+        <div name="itemsShow"
+             style="height:400px;border-top:1px solid black;border-bottom:1px solid black;overflow: auto">
+            <div v-show="sum.rowCount == 0"
+                 style="margin-top:10%;text-align:center;color:#7d7d7d">无数据
+            </div>
+            <div v-for='item in items' :key="item.sysparamCode" class="row row-item">
+                <span class="cell " style="width:40px;text-align: center"><input type="radio" name="itemChosen" style="margin:0"></span>
+                <span class="cell " style="text-align: right;width:50px" v-html="item.rownum"></span>
+                <span class="cell "  style="width:300px;" :title="item.name"
+                      v-html="giveup.strongKeyword(item.name, queryParams.kw, queryParams.ew)"></span>
+                <span class="cell "  :title="item.tel"
+                      v-html="giveup.strongKeyword(item.tel, queryParams.kw, queryParams.ew)"></span>
+                <span class="cell "  :title="item.headmanName"
+                      v-html="giveup.strongKeyword(item.headmanName, queryParams.kw, queryParams.ew)"></span>
+                <span class="cell " style="text-align: right;width:50px" v-html="item.orderNo"></span>
+                <span class="cell ">{{item.addTime?moment(item.addTime).format('YYYY-MM-DD HH:mm:ss'):''}}</span>
+                <span class="cell " >
+                   <button style="cursor:pointer;" @click='window.alert(`${item.rownum}.${item.name}，ID: ${item.hospitalId}`)'>复制ID</button>
+                    <button style="margin-left:5px;cursor:pointer;"
+                                             @click="window.location.href = `./hospitalInfo.html?hospitalId=${item.hospitalId}&currentPath=医院详情`">详情</button><button
+                        style="margin-left:5px;cursor:pointer;" @click="itemDel(item.hospitalId)">删除</button></span>
+            </div>
+
+        </div>
+        <div style="visibility: hidden;padding:3px;">123</div>
+        <div name="pagingBottomPad" style="text-align: left;padding:3px;font-size: 15px;position: absolute;bottom:0">
+            <span>{{'每页 ' + pageSize + ' 条，'}}</span>
+            <span style="cursor:pointer;margin-right:5px;text-decoration:underline;" @click="loadPrevPage()">上一页</span>
+            <span v-if="totalPageCount <= 10" v-for="index in totalPageCount" :key="index" style="margin-right:10px;"
+                  :style="{color:(index==pageNo?'#409eff':''),cursor:(index!=pageNo?'pointer':'')}"
+                  @click="goPage(index)">{{index}}</span>
+            <template v-if="totalPageCount > 10">
+                <span v-if="pageNo != 1"><span style="cursor:pointer;margin-right:10px;"
+                                               @click="goPage(1)">1</span><span
+                        style="margin-right:10px;">...</span></span>
+                <span style="color:#409eff;margin-right:10px;">{{pageNo}}</span>
+                <span v-if="pageNo != totalPageCount"><span style="margin-right:10px;">...</span><span
+                        style="cursor:pointer;;margin-right:10px;"
+                        @click="goPage(totalPageCount)">{{totalPageCount}}</span></span>
+            </template>
+            <span style="cursor:pointer;margin-right:10px;text-decoration:underline;" @click="loadNextPage()">下一页</span>
+            <input type="number" v-model="goPageNo" style="width:50px;margin-right:10px;"/><span
+                style="cursor:pointer;text-decoration:underline;" @click="goPage(goPageNo)">GO</span>
+        </div>
+
+    </div>
+
+</div>
+</body>
+<script>
+
+    $.ajaxSetup({
+        layerIndex: -1,
+        beforeSend: function () {
+            this.layerIndex = layer.load(0, {shade: [0.5, '#393D49']});
+        },
+        complete: function () {
+            layer.close(this.layerIndex);
+        }
+    });
+
+    Vue.prototype.giveup = giveup;
+    Vue.prototype.navim = navim;
+    Vue.prototype.window = window;
+    Vue.prototype.moment = moment;
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            queryString: this.giveup.parseQueryStr(location.search.substr(1)),
+            items: [],
+            itemsMap:{},
+            hasMoreItems: null,
+            newSort: true,
+            sorts: [],
+            goPageNo: null,
+            token: this.$cookies.get('token'),
+            queryParams: {},
+            pageNo: 1,
+            totalPageCount: null,
+            pageSize: 30,
+            sum: {rowCount: null},
+            currentPageItemCount: null,
+        },
+        mounted: function () {
+            debugger
+            this.navim.push({url: location.href, title: this.queryString.currentPath})
+            this.eventToRows()
+            this.initQuery();
+            this.loadItems();
+        },
+        methods: {
+            initQuery: function () {
+                this.sorts = {};
+                this.newSort = true
+            },
+            query: function () {
+                this.pageNo = 1
+                this.initQuery();
+                this.loadItems();
+            },
+            loadNextPage: function () {
+                this.pageNo++;
+                if (this.pageNo > this.totalPageCount)
+                    this.pageNo = this.totalPageCount
+                this.loadItems();
+            },
+            loadPrevPage: function () {
+                this.pageNo--;
+                if (this.pageNo <= 0)
+                    this.pageNo = 1
+                this.loadItems();
+            },
+            goPage: function (goPageNo) {
+                this.pageNo = goPageNo;
+                if (this.pageNo <= 0)
+                    this.pageNo = 1
+                if (this.pageNo > this.totalPageCount)
+                    this.pageNo = this.totalPageCount
+                this.loadItems();
+            },
+            sortItems: function (sortColumn) {
+                this.pageNo = 1
+                this.newSort = false;
+                if (this.sorts[sortColumn] == 'desc') {
+                    this.sorts[sortColumn] = null
+                } else if (this.sorts[sortColumn] == 'asc') {
+                    this.sorts[sortColumn] = 'desc'
+                } else {
+                    this.sorts[sortColumn] = 'asc'
+                }
+                this.loadItems();
+            },
+            eventToRows: function () {
+                $('.row').click(function () {
+                    $('.row [name=itemChosen] ').prop("checked", false);
+                    $(this).find('[name=itemChosen]').prop("checked", true);
+                    $('.row').css('background-color', '')
+                    $(this).css('background-color', '#e8e8e8')
+                })
+            },
+            itemDel: function (hospitalId) {
+                let item = this.itemsMap[hospitalId];
+                var r = confirm(`确认删除？${item.rownum}.` + (item.name||''))
+                if (r == true) {
+                    r = confirm(`再次确认删除？${item.rownum}.` + (item.name||''))
+                    if (r == true) {
+                        $.ajax({
+                            url: rootDis+"/maintain/hospitalDel",
+                            type: 'post',
+                            data: {token: this.token, hospitalId: item.hospitalId},
+                            async: false,
+                            success: (res) => {
+                                if (res.code == 0) {
+                                    this.items.splice(this.items.indexOf(item), 1);
+                                } else {
+                                    breakCodeProcess(res.code, res.codeMsg)
+                                }
+                            }
+                        })
+                    }
+                }
+            },
+            loadItems: function () {
+                debugger
+                this.queryParams.pn = this.pageNo;
+                this.queryParams.ps = this.pageSize;
+                this.queryParams.token = this.token;
+                this.queryParams.sorts = []
+                this.queryParams.orders = []
+                for (sortColumn in  this.sorts) {
+                    if(this.sorts[sortColumn]){
+                        this.queryParams.sorts.push(sortColumn)
+                        this.queryParams.orders.push(this.sorts[sortColumn])
+                    }
+                }
+                this.queryParams.sorts =this.queryParams.sorts.join(",")
+                this.queryParams.orders = this.queryParams.orders.join(",")
+                this.hasMoreItems = null
+                var thisVue = this
+
+
+                $.ajax({
+                    url: rootDis+"/maintain/hospitals",
+                    type: 'get',
+                    async: true,
+                    data: this.queryParams,
+                    success: (res) => {
+                        if (res.code == 0) {
+                            this.items = []
+                            this.itemsMap={}
+
+                            var data = res.data;
+                            this.pageSize = data.ps
+                            this.pageNo = data.pn
+                            this.sum = res.data.sum;
+                            this.totalPageCount = this.sum.rowCount % this.pageSize == 0 ? this.sum.rowCount / this.pageSize : parseInt(this.sum.rowCount / this.pageSize) + 1;
+
+                            this.currentPageItemCount = data.rows.length;
+                            if (this.currentPageItemCount < this.pageSize)
+                                this.hasMoreItems = false;
+                            if (this.currentPageItemCount == this.pageSize)
+                                this.hasMoreItems = true;
+                            debugger
+
+                            $(data.rows).each((index, item) => {
+                                item.rownum=(this.pageNo-1)*this.pageSize+1+index;
+                                this.itemsMap[item.hospitalId]=item
+                                this.items.push(item)
+                            })
+                        } else {
+                            breakCodeProcess(res.code,res.codeMsg)
+                        }
+                    }
+                })
+
+            }
+        }
+    })
+
+
+</script>
+
+</html>

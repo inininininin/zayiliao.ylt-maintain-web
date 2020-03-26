@@ -1,0 +1,217 @@
+body{
+
+   width: 100%;
+
+    height: 100%;
+
+    background: url("resource/background.png");
+
+    background-size:cover ;
+
+
+}
+
+.logo{
+
+
+    height: 33px;
+
+    line-height: 33px;
+
+    text-align: center;
+
+    margin-top: 1.67rem;
+
+    margin-bottom: 0.91rem;
+
+}
+
+.logo img{
+
+    /*width: 0.41rem;*/
+
+    /*height: 0.33rem;*/
+
+    width: 41px;
+
+    height: 33px;
+
+    display: inline-block;
+
+
+}
+
+.logo h2{
+    vertical-align: middle;
+    line-height: 33px;
+
+    /*font-size: 0.33rem;*/
+
+    font-size: 33px;
+
+    font-family: PingFangSC-Regular;
+
+    color: rgba(0,0,0,0.85);
+
+    display: inline-block;
+
+    margin: 0;
+
+
+}
+
+.number{
+
+    margin: 0 auto;
+
+    /*width: 3.68rem;*/
+
+    /*height: 0.4rem;*/
+
+    width: 368px;
+
+    height: 40px;
+
+    border: 1px solid #d9d9d9;
+
+    position: relative;
+
+}
+
+.number input{
+
+    width: 100%;
+
+    height: 100%;
+
+    border: 0;
+
+    outline: none;
+
+    padding-left: 80px;
+
+    padding-right: 10px;
+
+    color: #000;
+
+}
+
+.number>div{
+
+    width: 80px;
+
+    height: 100%;
+
+    position: absolute;
+
+    top:0;
+
+    line-height: 40px;
+
+    color: rgba(0,0,0,0.25);
+
+}
+
+.number>div img{
+
+    width: 16px;
+
+    height: 16px;
+
+    float: left;
+
+    margin-top: 12px;
+
+    margin-left:12px ;
+
+    margin-right: 10px;
+
+}
+
+.zdlogin{
+
+    width: 368px;
+
+    height: 16px;
+
+    margin: 27px auto;
+
+
+
+    color: rgba(0,0,0,0.65);
+
+    line-height: 16px;
+
+}
+
+.zdlogin div input{
+
+    width: 16px;
+
+    height: 16px;
+
+    margin-right:10px ;
+
+    margin-top: 0;
+
+    border-radius: 2px;
+
+    cursor: pointer;
+
+}
+
+.zdlogin span{
+
+    display: inline-block;
+
+    font-size: 14px;
+
+}
+
+.forgetpwd{
+
+    color: #1890ff;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+}
+
+.loginbtn{
+
+    width: 368px;
+
+    height: 40px;
+
+    margin: 0 auto;
+
+
+
+    border-radius: 4px;
+
+}
+
+.loginbtn button{
+
+    width: 100%;
+
+    height: 100%;
+
+    border-radius: 4px;
+
+    background: #1890ff;
+
+    color: #fff;
+
+    border: 0;
+
+}
+
+.registernow{
+
+    color: #1890ff;
+
+    cursor: pointer;
+
+}
