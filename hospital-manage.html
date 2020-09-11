@@ -3,29 +3,29 @@
 
 <head>
 
-    <title>忠安医联体运维</title>
+    <title>医联体运维</title>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/ylt/favicon.ico" type="image/x-icon" />
 
 
-    <script src="/libs/jquery.min.js"></script>
-    <script src="/libs/jquery.cookie.js"></script>
-    <script src="/libs/layer/layer.js"></script>
-    <script src="/libs/moment.js"></script>
-    <link rel="stylesheet" type="text/css" href="/libs/jquery-easyui-1.8.7/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="/libs/jquery-easyui-1.8.7/themes/icon.css">
-    <script type="text/javascript" src="/libs/jquery-easyui-1.8.7/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="/libs/jquery-easyui-1.8.7/locale/easyui-lang-zh_CN.js"></script>
-    <link rel="stylesheet" href="/libs/jQueryViewer20160329/css/viewer.min.css">
-    <script src="/libs/jQueryViewer20160329/js/viewer.min.js"></script>
-    <script src="/libs/jQueryViewer20160329/js/viewer-jquery.min.js"></script>
-    <script src="/libs/common.js"></script>
-    <link rel="stylesheet" href="/libs/common.css" />
-    <script src="/libs/jquery.extend.oneall.js"></script>
+    <script src="/ylt/libs/jquery.min.js"></script>
+    <script src="/ylt/libs/jquery.cookie.js"></script>
+    <script src="/ylt/libs/layer/layer.js"></script>
+    <script src="/ylt/libs/moment.js"></script>
+    <link rel="stylesheet" type="text/css" href="/ylt/libs/jquery-easyui-1.8.7/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/ylt/libs/jquery-easyui-1.8.7/themes/icon.css">
+    <script type="text/javascript" src="/ylt/libs/jquery-easyui-1.8.7/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/ylt/libs/jquery-easyui-1.8.7/locale/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" href="/ylt/libs/jQueryViewer20160329/css/viewer.min.css">
+    <script src="/ylt/libs/jQueryViewer20160329/js/viewer.min.js"></script>
+    <script src="/ylt/libs/jQueryViewer20160329/js/viewer-jquery.min.js"></script>
+    <script src="/ylt/libs/common.js"></script>
+    <link rel="stylesheet" href="/ylt/libs/common.css" />
+    <script src="/ylt/libs/jquery.extend.oneall.js"></script>
 
 
-    <script src="/maintain/libs/common.js"></script>
-    <link rel="stylesheet" href="/maintain/libs/common.css" />
+    <script src="/ylt/maintain/libs/common.js"></script>
+    <link rel="stylesheet" href="/ylt/maintain/libs/common.css" />
 
 
 
@@ -90,7 +90,7 @@
                             debugger
                             if (value == '汇总：')
                                 return value;
-                            return `<a href="JavaScript:void(0)" style="width:100%;display:inline-block;height:100%;" title="${value||''}" onclick="maintainCommon.newTab('医院:${common.subOmitRight(row.name, 10)}','/maintain/hospital.html?hospitalId=${row.hospitalId}')">${value}</a>`;
+                            return `<a href="JavaScript:void(0)" style="width:100%;display:inline-block;height:100%;" title="${value||''}" onclick="maintainCommon.newTab('医院:${common.subOmitRight(row.name, 10)}','/ylt/maintain/hospital.html?hospitalId=${row.hospitalId}')">${value}</a>`;
                         }, styler: function (value, row, index) {
                             return ``
                         }
@@ -132,7 +132,7 @@
                     param.pn = param.page;
                     Object.assign(param, rowsPad.queryParam);
                     $.ajax({
-                        url: '/maintain/hospitals',
+                        url: '/ylt/maintain/hospitals',
                         type: 'get',
                         data: param,
                         success: function (data) {
@@ -217,7 +217,7 @@
             if (doDel) {
                 $.ajax({
                     type: 'post',
-                    url: `/maintain/hospital-delete`,
+                    url: `/ylt/maintain/hospital-delete`,
                     data: { token: rowsPad.param.token, hospitalId: hospitalIdsSplit },
                     success: function (data) {
                         if (data.codeMsg)
@@ -265,7 +265,7 @@
             if (doDel) {
                 $.ajax({
                     type: 'post',
-                    url: `/maintain/hospitals-delete`,
+                    url: `/ylt/maintain/hospitals-delete`,
                     data:Object.assign( { token: rowsPad.param.token, password: password },rowsPad.queryParam),
                     success: function (data) {
                         if (data.codeMsg)
@@ -339,7 +339,7 @@
                 param.ps = param.rows;
                 param.pn = param.page;
                 $.ajax({
-                    url: '/maintain/manager-users',
+                    url: '/ylt/maintain/manager-users',
                     type: 'get',
                     data: param,
                     success: function (data) {

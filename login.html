@@ -3,10 +3,10 @@
 
 <head>
 
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/ylt/favicon.ico" type="image/x-icon" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <title>忠安医联体运维</title>
+    <title>医联体运维</title>
     <script src="libs/common.js"></script>
     <link rel="stylesheet" href="libs/common.css" />
     <script src="login/login.js"></script>
@@ -21,8 +21,8 @@
 <body>
     <div style="margin-bottom:5%;"></div>
     <div class="logo smargin">
-        <img src="/favicon.ico" alt="" />
-        <h2>忠安医联体-运维</h2>
+        <img src="/ylt/favicon.ico" alt="" />
+        <h2>医联体-运维</h2>
     </div>
 
     <div id="loginPad">
@@ -88,7 +88,7 @@
 
 
         $.ajax({
-            url: '/maintain/login-refresh',
+            url: '/ylt/login-refresh',
             type: 'post',
             async: false,
             success: function (data) {
@@ -105,7 +105,7 @@
         var account = $('.phone input').val();
         var password = $('.password input').val();
         $.ajax({
-            url: '/maintain/login',
+            url: '/ylt/login',
             data: { account: account, password: password },
             type: 'post',
             async: false,
@@ -115,7 +115,7 @@
                 if (data.code == 0) {
                     $('#message').fadeIn(100).fadeOut(1500).find('[name=content]').text('成功');
                     $.ajax({
-                        url: '/maintain/login-refresh',
+                        url: '/ylt/login-refresh',
                         type: 'post',
                         async: false,
                         success: function (data) {

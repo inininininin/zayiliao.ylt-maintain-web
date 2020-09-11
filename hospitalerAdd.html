@@ -4,8 +4,8 @@
     <script>
         var rootDis="../"
     </script>
-    <title>忠安医联体运维</title>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <title>医联体运维</title>
+    <link rel="shortcut icon" href="/ylt/favicon.ico" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -64,10 +64,10 @@
             </div>
 
             <div style="margin:20px 0;">
-                <span class="title" style="width:30%;display: inline-block;text-align: right;vertical-align: top;">姓名</span>
+                <span class="title" style="width:30%;display: inline-block;text-align: right;vertical-align: top;">昵称</span>
                 <span class="title" style="width:5%;display: inline-block;"></span>
                 <span style="width:50%;display: inline-block;;text-align: left">
-                    <input id="name" class="valueAlter giveup-cache" columnName="姓名"
+                    <input id="name" class="valueAlter giveup-cache" columnName="昵称"
                            style="width:80%;padding:3px 3px" type="text" required maxlength="32" placeholder="最大长度32"/>
                 </span>
             </div>
@@ -163,7 +163,7 @@
         function findHospital(kw,ew,pageNo){
             pageNo=pageNo||1;
             $.ajax({
-                url: rootDis+"/maintain/hospitals",
+                url: "/ylt/maintain/hospitals",
                 type: 'get',
                 async: false,
                 data: {token:token,kw:kw,pn:pageNo,ps:9},
@@ -256,7 +256,7 @@
         param.hospitalId= jqDomValue = jqDom.val();
 
         $.ajax({
-            url: rootDis+"/maintain/hospitalerAdd",
+            url: "/ylt/maintain/hospitalerAdd",
             type: 'post',
             async: false,
             data: param,
@@ -289,7 +289,7 @@
             var fd = new FormData()
             fd.append('file', file);
             $.ajax({
-                url: rootDis+'upload-static-file?' + $.param({quality: r/10}),
+                url: 'upload-static-file?' + $.param({quality: r/10}),
                 type: 'POST',
                 data: fd,
                 cache: false,

@@ -3,32 +3,32 @@
 
 <head>
 
-    <title>忠安医联体运维</title>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <title>医联体运维</title>
+    <link rel="shortcut icon" href="/ylt/favicon.ico" type="image/x-icon" />
 
 
-    <script src="/libs/jquery.min.js"></script>
-    <script src="/libs/jquery.cookie.js"></script>
-    <script src="/libs/layer/layer.js"></script>
-    <script src="/libs/moment.js"></script>
-    <link rel="stylesheet" type="text/css" href="/libs/jquery-easyui-1.8.7/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="/libs/jquery-easyui-1.8.7/themes/icon.css">
-    <script type="text/javascript" src="/libs/jquery-easyui-1.8.7/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="/libs/jquery-easyui-1.8.7/locale/easyui-lang-zh_CN.js"></script>
-    <link rel="stylesheet" href="/libs/jQueryViewer20160329/css/viewer.min.css">
-    <script src="/libs/jQueryViewer20160329/js/viewer.min.js"></script>
-    <script src="/libs/jQueryViewer20160329/js/viewer-jquery.min.js"></script>
-    <script src="/libs/common.js"></script>
-    <link rel="stylesheet" href="/libs/common.css" />
-    <script src="/libs/jquery.extend.oneall.js"></script>
-    <link rel="stylesheet" href="/libs/kindeditor/themes/default/default.css" />
-    <link rel="stylesheet" href="/libs/kindeditor/plugins/code/prettify.css" />
-    <script charset="utf-8" src="/libs/kindeditor/kindeditor-all.js"></script>
-    <script charset="utf-8" src="/libs/kindeditor/lang/zh-CN.js"></script>
-    <script charset="utf-8" src="/libs/kindeditor/plugins/code/prettify.js"></script>
+    <script src="/ylt/libs/jquery.min.js"></script>
+    <script src="/ylt/libs/jquery.cookie.js"></script>
+    <script src="/ylt/libs/layer/layer.js"></script>
+    <script src="/ylt/libs/moment.js"></script>
+    <link rel="stylesheet" type="text/css" href="/ylt/libs/jquery-easyui-1.8.7/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/ylt/libs/jquery-easyui-1.8.7/themes/icon.css">
+    <script type="text/javascript" src="/ylt/libs/jquery-easyui-1.8.7/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/ylt/libs/jquery-easyui-1.8.7/locale/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" href="/ylt/libs/jQueryViewer20160329/css/viewer.min.css">
+    <script src="/ylt/libs/jQueryViewer20160329/js/viewer.min.js"></script>
+    <script src="/ylt/libs/jQueryViewer20160329/js/viewer-jquery.min.js"></script>
+    <script src="/ylt/libs/common.js"></script>
+    <link rel="stylesheet" href="/ylt/libs/common.css" />
+    <script src="/ylt/libs/jquery.extend.oneall.js"></script>
+    <link rel="stylesheet" href="/ylt/libs/kindeditor/themes/default/default.css" />
+    <link rel="stylesheet" href="/ylt/libs/kindeditor/plugins/code/prettify.css" />
+    <script charset="utf-8" src="/ylt/libs/kindeditor/kindeditor-all.js"></script>
+    <script charset="utf-8" src="/ylt/libs/kindeditor/lang/zh-CN.js"></script>
+    <script charset="utf-8" src="/ylt/libs/kindeditor/plugins/code/prettify.js"></script>
 
-    <script src="/maintain/libs/common.js"></script>
-    <link rel="stylesheet" href="/maintain/libs/common.css" />
+    <script src="/ylt/maintain/libs/common.js"></script>
+    <link rel="stylesheet" href="/ylt/maintain/libs/common.css" />
 </head>
 
 <style>
@@ -64,7 +64,7 @@
 
             $.ajax({
                 type: 'get',
-                url: `/maintain/hospital-office/${rowPad.param.officeId}`,
+                url: `/ylt/maintain/hospital-office/${rowPad.param.officeId}`,
                 async: false,
                 data: { token: rowPad.param.token },
                 success: function (data) {
@@ -82,7 +82,7 @@
             $(rowPad.selector).find('[name=dg]').datagrid()
 
             rowPad.contentKindEditor = KindEditor.create('#rowPad [name=content]', {
-                cssPath: '/libs/kindeditor/plugins/code/prettify.css',
+                cssPath: '/ylt/libs/kindeditor/plugins/code/prettify.css',
                 uploadJson: '/kindeditor/upload_json.jsp',
                 fileManagerJson: '/kindeditor/file_manager_json.jsp',
                 allowFileManager: true,
@@ -108,7 +108,7 @@
         rowAlter: function () {
             $.ajax({
                 type: 'post',
-                url: '/maintain/hospital-office-alter',
+                url: '/ylt/maintain/hospital-office-alter',
                 data: Object.assign({ token: rowPad.param.token, officeId: rowPad.param.officeId, content: rowPad.contentKindEditor.html() }, rowPad.row),
                 success: function (data) {
                     if (data.codeMsg)
@@ -189,7 +189,7 @@
                             param.ps = param.rows;
                             param.pn = param.page;
                             $.ajax({
-                                url: '/maintain/hospitals',
+                                url: '/ylt/maintain/hospitals',
                                 type: 'get',
                                 data: param,
                                 success: function (data) {

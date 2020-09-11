@@ -4,9 +4,9 @@
 <head lang="en">
 
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/ylt/favicon.ico" type="image/x-icon" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>忠安医联体运维</title>
+    <title>医联体运维</title>
     <script src="libs/common.js"></script>
     <link rel="stylesheet" href="libs/common.css" />
     <script src="index/index.js"></script>
@@ -41,7 +41,7 @@
         <div style="height:70px;border-bottom: 1px solid darkgray;">
             <div
                 style="line-height: 70px;float:left;height:100%;padding:0 30px;text-align: center;font-weight: 700;font-size: 24px;">
-                忠安医联体-运维</div>
+                医联体-运维</div>
         </div>
         <div style="position: absolute;top:71px;left:0;bottom:0;right:0;">
             <div id="leftPad"
@@ -108,7 +108,7 @@
 
     if (token) {
         $.ajax({
-            url: '/maintain/login-refresh',
+            url: '/ylt/login-refresh',
             type: 'post',
             async: false,
             success: function (data) {
@@ -162,7 +162,7 @@
     zNodes.push({ name: '专家', _url: './hospital-doctor-manage.html' })
     zNodes.push({ name: '广告', _url: './ad-manage.html' })
     zNodes.push({ name: '页面',children:[
-		{name:'用户协议',_url:'/maintain/set-page-user-protocol.html'}
+		{name:'用户协议',_url:'/ylt/maintain/set-page-user-protocol.html'}
     ] })
     zNodes.push({ name: '运维用户', _url: './maintain-user-manage.html' })
     zNodes.push({ name: '参数', _url: './param-manage.html' })
@@ -197,7 +197,7 @@
       
         $.ajax({
             type:'post',
-            url: '/maintain/logout',
+            url: '/ylt/maintain/logout',
             data: { token: token },
             async: true
         })

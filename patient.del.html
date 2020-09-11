@@ -4,10 +4,10 @@
     <script>
         var rootDis="../"
     </script>
-    <title>忠安医联体运维</title>
+    <title>医联体运维</title>
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/ylt/favicon.ico" type="image/x-icon" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -316,7 +316,7 @@
                     r = confirm(`再次确认删除？${item.rownum}.` + (item.name||''))
                     if (r == true) {
                         $.ajax({
-                            url: rootDis+"/maintain/patientDel",
+                            url: "/ylt/maintain/patientDel",
                             type: 'post',
                             data: {token: this.token, patientId: item.patientId},
                             async: false,
@@ -352,7 +352,7 @@
 
 
                 $.ajax({
-                    url: rootDis+"/maintain/patientList",
+                    url: "/ylt/maintain/patientList",
                     type: 'post',
                     async: true,
                     data: this.queryParams,
@@ -396,7 +396,7 @@
                 function findHospital(kw, ew, pageNo) {
                     pageNo = pageNo || 1;
                     $.ajax({
-                        url: rootDis + "/maintain/hospitals",
+                        url:  "/ylt/maintain/hospitals",
                         type: 'get',
                         async: false,
                         data: {token: thisVue.token, kw: kw, pn: pageNo,ps:9},
@@ -449,7 +449,7 @@
                 function findClinic(kw, ew, pageNo) {
                     pageNo = pageNo || 1;
                     $.ajax({
-                        url: rootDis + "/maintain/clinicList",
+                        url:  "/ylt/maintain/clinicList",
                         type: 'post',
                         async: false,
                         data: {token: thisVue.token,hospitalId:thisVue.queryParams.hospitalId,kw: kw, pn: pageNo,ps:9},

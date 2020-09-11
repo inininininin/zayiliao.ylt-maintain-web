@@ -4,8 +4,8 @@
     <script>
         var rootDis = ""
     </script>
-    <title>忠安医联体运维</title>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+    <title>医联体运维</title>
+    <link rel="shortcut icon" href="/ylt/favicon.ico" type="image/x-icon"/>
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -282,7 +282,7 @@
         function findHospital(kw,ew,pageNo){
             pageNo=pageNo||1;
             $.ajax({
-                url: rootDis+"/maintain/hospitals",
+                url: "/ylt/maintain/hospitals",
                 type: 'get',
                 async: false,
                 data: {token:token,kw:kw,pn:pageNo,ps:9},
@@ -330,7 +330,7 @@
 
 
     $.ajax({
-        url: rootDis + "/maintain/articleInfo",
+        url:  "/ylt/maintain/articleInfo",
         type: 'post',
         async: false,
         data: {articleId: articleId, token: token},
@@ -430,7 +430,7 @@
         param.addTime= $('#addTime').val()?new Date($('#addTime').val()).getTime():'';
 
         $.ajax({
-            url: rootDis + "/maintain/articleAlter",
+            url:  "/ylt/maintain/articleAlter",
             type: 'post',
             async: false,
             data: param,
@@ -463,7 +463,7 @@
             var fd = new FormData()
             fd.append('file', file);
             $.ajax({
-                url: rootDis + 'upload-static-file?' + $.param({quality: r/10}),
+                url:  'upload-static-file?' + $.param({quality: r/10}),
                 type: 'POST',
                 data: fd,
                 cache: false,

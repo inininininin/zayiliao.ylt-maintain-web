@@ -4,10 +4,10 @@
     <script>
         var rootDis="../"
     </script>
-    <title>忠安医联体运维</title>
+    <title>医联体运维</title>
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/ylt/favicon.ico" type="image/x-icon" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -124,7 +124,7 @@
             <span class="cell " style="width:40px;">选择</span>
             <span class="cell " style="width:50px;">序号</span>
             <span class="cell "  style="width:300px;" >手机</span>
-            <span class="cell "  >姓名</span>
+            <span class="cell "  >昵称</span>
             <span class="cell " style="cursor: pointer;" @click="sortItems('hospitalId')" >医院<span
                     class="sortBtn">{{newSort?'-':(sorts.hospitalId=='desc'?'↓':(sorts.hospitalId=='asc'?'↑':'-'))}}</span></span>
             <span class="cell " style="cursor: pointer;" @click="sortItems('clinicId')" >门诊<span
@@ -283,7 +283,7 @@
                     r = confirm(`再次确认删除？${item.rownum}.` + item.phone||'')
                     if (r == true) {
                         $.ajax({
-                            url: rootDis+"/maintain/clinicerDel",
+                            url: "/ylt/maintain/clinicerDel",
                             type: 'post',
                             data: {token: this.token, clinicerId: item.clinicerId},
                             async: false,
@@ -318,7 +318,7 @@
 
 
                 $.ajax({
-                    url: rootDis+"/maintain/clinicerList",
+                    url: "/ylt/maintain/clinicerList",
                     type: 'post',
                     async: true,
                     data: this.queryParams,
@@ -361,7 +361,7 @@
                 function findHospital(kw, ew, pageNo) {
                     pageNo = pageNo || 1;
                     $.ajax({
-                        url: rootDis + "/maintain/hospitals",
+                        url:  "/ylt/maintain/hospitals",
                         type: 'get',
                         async: false,
                         data: {token: thisVue.token, kw: kw, pn: pageNo,ps:9},

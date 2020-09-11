@@ -4,8 +4,8 @@
     <script>
         var rootDis="../"
     </script>
-    <title>忠安医联体运维</title>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <title>医联体运维</title>
+    <link rel="shortcut icon" href="/ylt/favicon.ico" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -256,7 +256,7 @@
         $('#adminarea3Id').html('')
         $('#adminarea3Id').append('<option value="">请选择</option>')
         $.ajaxSettings.async = false
-        $.get(rootDis+'resource/area1.json', null, function (res) {
+        $.get('resource/area1.json', null, function (res) {
             $(res).each(function (index, ele) {
                 $('#adminarea1Id').append('<option value="' + ele.code + '">' + ele.name + '</option>');
             })
@@ -276,7 +276,7 @@
             }
         }
         $.ajaxSettings.async = false
-        $.get(rootDis+'/resource/area2.json', null, function (res) {
+        $.get('/resource/area2.json', null, function (res) {
             $(res['code' + area1Code].children).each(function (index, ele) {
                 $('#adminarea2Id').append('<option value="' + ele.code + '">' + ele.name + '</option>');
             })
@@ -294,7 +294,7 @@
             }
         }
         $.ajaxSettings.async = false
-        $.get(rootDis+'/resource/area3.json', null, function (res) {
+        $.get('/resource/area3.json', null, function (res) {
             $(res['code' + area2Code].children).each(function (index, ele) {
                 $('#adminarea3Id').append('<option value="' + ele.code + '">' + ele.name + '</option>');
             })
@@ -388,7 +388,7 @@
 
 
         $.ajax({
-            url: rootDis+"/maintain/hospitalAdd",
+            url: "/ylt/maintain/hospitalAdd",
             type: 'post',
             async: false,
             data: param,
@@ -423,7 +423,7 @@
             var fd = new FormData()
             fd.append('file', file);
             $.ajax({
-                url: rootDis+'upload-static-file?' + $.param({quality: r/10}),
+                url: 'upload-static-file?' + $.param({quality: r/10}),
                 type: 'POST',
                 data: fd,
                 cache: false,
@@ -463,7 +463,7 @@
             var fd = new FormData()
             fd.append('file', file);
             $.ajax({
-                url: rootDis+'upload-static-file?' + $.param({quality: r/10}),
+                url: 'upload-static-file?' + $.param({quality: r/10}),
                 type: 'POST',
                 data: fd,
                 cache: false,

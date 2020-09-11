@@ -4,9 +4,9 @@
 <head lang="en">
 
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/ylt/favicon.ico" type="image/x-icon" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>忠安医联体运维</title>
+    <title>医联体运维</title>
     <script src="libs/common.js"></script>
     <link rel="stylesheet" href="libs/common.css" />
     <script src="index/index.js"></script>
@@ -84,7 +84,7 @@
 
 
     $.ajax({
-        url: '/maintain/login-refresh',
+        url: '/ylt/login-refresh',
         type: 'post',
         async: false,
         success: function (data) {
@@ -139,7 +139,7 @@
     zNodes.push({ name: '短连接', _url: './set-alley.html' })
     zNodes.push({
         name: '页面', children: [
-            { name: '用户协议', _url: '/maintain/set-page-user-protocol.html' }
+            { name: '用户协议', _url: '/ylt/maintain/set-page-user-protocol.html' }
         ], _url: null
     })
     if (logining.type == 1) {
@@ -175,7 +175,7 @@
 
         $.ajax({
             type: 'post',
-            url: '/maintain/logout',
+            url: '/ylt/maintain/logout',
             async: true
         })
         location.href = './login.html';
