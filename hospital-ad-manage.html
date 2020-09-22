@@ -26,7 +26,7 @@
 
     <script src="../libs/common.js"></script>
     <link rel="stylesheet" href="../libs/common.css" />
-
+    <script charset="utf-8" src="../libs/tinymce/tinymce.min.js"></script>
 
 
 
@@ -102,7 +102,7 @@
                             debugger
                             if (value == '汇总：')
                                 return value;
-                            return `<a href="JavaScript:void(0)" style="width:100%;display:inline-block;height:100%;" title="${value || ''}" onclick="maintainCommon.newTab('医院广告:${common.subOmitRight(row.name, 10)}','/ylt/maintain/hospital-ad.html?hospitalAdId=${row.hospitalAdId}')">${value}</a>`;
+                            return `<a href="JavaScript:void(0)" style="width:100%;display:inline-block;height:100%;" title="${value || ''}" onclick="maintainCommon.newTab('医院广告:${common.subOmitRight(row.name, 10)}','../hospital-ad.html?hospitalAdId=${row.hospitalAdId}')">${value}</a>`;
                         }, styler: function (value, row, index) {
                             return ``
                         }

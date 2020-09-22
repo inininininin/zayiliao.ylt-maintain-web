@@ -115,7 +115,7 @@
                 if(data.codeMsg)
                     alert(data.codeMsg)
                 if (data.code == 0) {
-                    $.cookie('logining', JSON.stringify(data.data), { expires: 30, path: '/' });
+                    // $.cookie('logining', JSON.stringify(data.data), { expires: 30, path: '/' });
                     account = data.data.account
                 } else {
                     maintainCommon.breakCodeProcess(data.code, data.codeMsg)
@@ -162,7 +162,7 @@
     zNodes.push({ name: '专家', _url: './hospital-doctor-manage.html' })
     zNodes.push({ name: '广告', _url: './ad-manage.html' })
     zNodes.push({ name: '页面',children:[
-		{name:'用户协议',_url:'/ylt/maintain/set-page-user-protocol.html'}
+		{name:'用户协议',_url:'../set-page-user-protocol.html'}
     ] })
     zNodes.push({ name: '运维用户', _url: './maintain-user-manage.html' })
     zNodes.push({ name: '参数', _url: './param-manage.html' })

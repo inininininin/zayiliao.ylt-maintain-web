@@ -4,7 +4,7 @@ maintainCommon.breakCodeProcess = function (code, codeMsg) {
     debugger
     if (code == 20) {
         if (confirm('现在去登录>>>')) {
-            $(`<a href="/ylt/maintain/login.html"  >123</a>`)[0].click()
+            $(`<a href="../login.html"  >123</a>`)[0].click()
         }
     }
 
@@ -103,7 +103,7 @@ common.uploadImage = function (inputDom, ook) {
     var fd = new FormData()
     fd.append('file', file);
     $.ajax({
-        url: '/upload-static-file?' + $.param({ quality: r/10 }),
+        url: '/ylt/upload-file?' + $.param({ quality: r/10 }),
         type: 'POST',
         data: fd,
         cache: false,

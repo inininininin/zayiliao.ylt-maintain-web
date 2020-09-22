@@ -94,8 +94,8 @@
             async: false,
             success: function (res) {
                 if (res.code == 0) {
-                    $.cookie('token', res.data.token, {expires: 30, path: '/'});
-                    $.cookie('logining', JSON.stringify(res.data), {expires: 30, path: '/'});
+                    // $.cookie('token', res.data.token, {expires: 30, path: '/'});
+                    // $.cookie('logining', JSON.stringify(res.data), {expires: 30, path: '/'});
                     account = res.data.account
                 } else {
                     $.removeCookie('token', {path: '/'});
