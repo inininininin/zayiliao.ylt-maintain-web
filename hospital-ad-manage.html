@@ -65,7 +65,7 @@
                     },
                     {
                         field: 'type', title: '类型', width: 80, align: 'left', halign: 'center', formatter: function (value, row, index) {
-                            return value == 0 ? '无' : value == 1 ? '网页' : value == 2 ? '文章' : value == 3 ? '专家' :value == 4 ? '案例' :value == 5 ? '活动' :value == 6 ? '医院主页' :value == 7? '专家列表' :value == 8 ? '科室列表' :'未知';
+                            return value == 0 ? '无' : value == 1 ? '网页' : value == 2 ? '文章' : value == 3 ? '专家' :value == 4 ? '案例' :value == 5 ? '活动' :value == 6 ? '医院主页' :value == 7? '专家列表' :value == 8 ? '科室列表' :value == 9? '案例列表' :'未知';
                         }
                     },
                     {
@@ -366,6 +366,9 @@
 		},{
 			text: '科室列表',
 			value: '8'
+		},{
+			text: '案例列表',
+			value: '9'
 		}],
                      iconWidth:20,
                      icons:[{
