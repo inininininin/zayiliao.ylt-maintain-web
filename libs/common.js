@@ -4,7 +4,7 @@ maintainCommon.breakCodeProcess = function (code, codeMsg) {
     debugger
     if (code == 20) {
         if (confirm('现在去登录>>>')) {
-            $(`<a href="../login.html"  >123</a>`)[0].click()
+            $(`<a href="./login.html"  >123</a>`)[0].click()
         }
     }
 
