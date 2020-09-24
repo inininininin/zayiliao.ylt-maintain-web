@@ -94,7 +94,7 @@
                             debugger
                             if (value == '汇总：')
                                 return value;
-                            return `<a href="JavaScript:void(0)" style="width:100%;display:inline-block;height:100%;" title="${value||''}" onclick="maintainCommon.newTab('门诊:${common.subOmitRight(row.name, 10)}','../hospital-clinic.html?clinicId=${row.clinicId}')">${value}</a>`;
+                            return `<a href="JavaScript:void(0)" style="width:100%;display:inline-block;height:100%;" title="${value||''}" onclick="maintainCommon.newTab('门诊:${common.subOmitRight(row.name, 10)}','./hospital-clinic.html?clinicId=${row.clinicId}')">${value}</a>`;
                         }, styler: function (value, row, index) {
                             return ``
                         }
