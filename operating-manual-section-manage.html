@@ -72,7 +72,7 @@
                         field: 'lowerCount', title: '下级数', width: 70, align: 'right', sortable: true, halign: 'center', formatter: function (value, row, index) {
                             debugger
 
-                            return `<a href="JavaScript:void(0)" style="width:100%;display:inline-block;" title="${value || ''}" onclick="maintainCommon.newTab('下级章节:${common.subOmitRight(row.name, 10)}','../operating-manual-section-manage.html?operatingManualId=${row.operatingManualId}&upperId=${row.operatingManualSectionId}&upperName=${row.name}')">${value}</a>`;
+                            return `<a href="JavaScript:void(0)" style="width:100%;display:inline-block;" title="${value || ''}" onclick="maintainCommon.newTab('下级章节:${common.subOmitRight(row.name, 10)}','./operating-manual-section-manage.html?operatingManualId=${row.operatingManualId}&upperId=${row.operatingManualSectionId}&upperName=${row.name}')">${value}</a>`;
                         }
                     },
                     {
@@ -105,7 +105,7 @@
                             debugger
                             if (value == '汇总：')
                                 return value;
-                            return `<a href="JavaScript:void(0)" style="width:100%;display:inline-block;" title="${value || ''}" onclick="maintainCommon.newTab('手册章节:${common.subOmitRight(row.name, 10)}','../operating-manual-section.html?operatingManualSectionId=${row.operatingManualSectionId}')">${value}</a>`;
+                            return `<a href="JavaScript:void(0)" style="width:100%;display:inline-block;" title="${value || ''}" onclick="maintainCommon.newTab('手册章节:${common.subOmitRight(row.name, 10)}','./operating-manual-section.html?operatingManualSectionId=${row.operatingManualSectionId}')">${value}</a>`;
                         }, styler: function (value, row, index) {
                             return ``
                         }
