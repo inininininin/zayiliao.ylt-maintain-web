@@ -57,9 +57,9 @@
             $(rowsPad.selector).find('[name=dg]').datagrid({
                 columns: [[
                     {
-                        field: 'cover', title: '封面', width: 60, align: 'center', halign: 'center', formatter: function (value, row, index) {
-                            return value ? `<span class="image-previewer"><img src='${value}' style='width:50px' data-original='${value}'/></span>` : value
-                        }
+                            field: 'cover', title: '封面', width: 60, align: 'center', halign: 'center', formatter: function (value, row, index) {
+                                return value ? `<span class="image-previewer"><img src='${value}' style='width:50px' data-original='${value}'/></span>` : value
+                            }
                     },
                     { field: 'tel', title: '电话', width: 150, align: 'left', halign: 'center', formatter: function (value, row, index) {
                             return  `<span style="width:100%;display:inline-block;" title="${value||''}">${value||''}</span>`
@@ -100,7 +100,6 @@
                 selectOnCheck: false,
                 multiSort: true,
                 autoRowHeight: false,
-                
                 onCheck: function (index, row) {
                     $(rowsPad.selector).find('[name=tb] [name=checkedCount]').html(`已选:${$(rowsPad.selector).find('[name=dg]').datagrid('getChecked').length}`)
                 },
@@ -117,7 +116,7 @@
 
                 },
                 loader: function (param, success, error) {
-                    debugger
+                    // debugger
                     $(rowsPad.selector).find('[name=dg]').datagrid('clearChecked');
                     param.token = rowsPad.param.token;
                     param.ps = param.rows;
@@ -128,6 +127,8 @@
                         type: 'get',
                         data: param,
                         success: function (data) {
+                            debugger
+
                             if (data.code != 0) {
                                 alert(data.codeMsg)
                                 maintainCommon.breakCodeProcess(data.code, data.codeMsg)
