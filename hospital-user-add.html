@@ -38,13 +38,14 @@
 
 
     var queryStringObject = common.queryStringObject();
-
+    var accountType = 0;
     var rowPad = {
         selector: "#rowPad",
         param: { token: null },
         row: {
 
         },
+        
         contentKindEditor: null,
         beforePage: function () {
         },
@@ -54,10 +55,17 @@
 
         },
         rowAdd: function () {
+            let hospitalIs = 0,
+                hospitalAdminIs = 0,
+                hospitalOperateIs = 0,
+                clinicIs = 0,
+                operateIs = 0;
             $.ajax({
                 type: 'post',
                 url: '/ylt/maintain/hospital-user-add',
-                data: Object.assign({ token: rowPad.param.token }, rowPad.row),
+                data: Object.assign({ token: rowPad.param.token }, rowPad.row,{
+                    hospitalAdminIs : accountType
+                }),
                 success: function (data) {
                     if (data.codeMsg)
                         alert(data.codeMsg)
@@ -165,6 +173,29 @@
                                     onChange:function(newValue, oldValue){
                                         rowPad.row.passwordConfirm=newValue
                                     }" style="width:200px"></td>
+                </tr>
+                <tr>
+                    <td>医院管理</td>
+                    <td><input name="del" class="easyui-combobox" style="width:100%" data-options="editable:false,panelHeight:'auto',
+                        value:0,data:[
+                        {
+                            text: '否',
+                            value: '0'
+                        },{
+                            text: '是',
+                            value: '1'
+                        }],
+                            iconWidth:20,
+                            icons:[{
+                                iconCls:'icon-clear',
+                                handler: function(e){
+                                    $(e.data.target).combobox('setValue','');
+                                }
+                            }],
+                            onChange:function(newValue, oldValue){
+                                debugger
+                            accountType=newValue
+                            }" /></td>
                 </tr>
                 <tr>
                     <td>手机</td>
